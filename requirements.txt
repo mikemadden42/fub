@@ -1,0 +1,2 @@
+altgraph==0.17
+macholib==1.14

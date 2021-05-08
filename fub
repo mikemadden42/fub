@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+"""Determine the type of macOS app."""
+
+import logging
+import os
+from pathlib import Path
+
+from macholib import MachO, mach_o
+
+# Setup logging.¬
+logging.basicConfig(
+    filename="fub.log",
+    filemode="w",
+    format="%(asctime)s|%(name)s|%(levelname)s|%(message)s",
+    level="INFO",
+)
+
+
+def get_arch(mac_app):
+    """Determine the type of macOS app."""
+    m = MachO.MachO(mac_app)
+    archs = []
+    for header in m.headers:
+        cpu_type = header.header.cputype
+        arch = str(mach_o.CPU_TYPE_NAMES.get(cpu_type)).lower()
+        archs.append(arch)
+    return archs
+
+
+def get_app_binaries():
+    """Get list of installed macOS applications."""
+    apps = os.listdir("/Applications")
+    binaries = []
+    for app in apps:
+        if app in (".DS_Store", ".localized", "Utilities"):
+            continue
+        base_app = app
+        if app.endswith(".app"):
+            size = len(app)
+            base_app = app[: size - 4]
+        mac_binary = Path("/Applications/" + app + "/Contents/MacOS/" + base_app)
+        binaries.append(mac_binary)
+    return binaries
+
+
+if __name__ == "__main__":
+    for binary in get_app_binaries():
+        try:
+            print(binary, end=" -> ")
+            print(get_arch(binary))
+        except FileNotFoundError as e:
+            print()
+            logging.error(e)
+        except NotADirectoryError as e:
+            print()
+            logging.error(e)
