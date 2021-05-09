@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """Determine the type of macOS app."""
 
+# standard libraries
 import logging
 import os
+import plistlib
 from pathlib import Path
 
+# third party libraries
 from macholib import MachO, mach_o
 
-# Setup logging.¬
+# Setup logging.
 logging.basicConfig(
     filename="fub.log",
     filemode="w",
@@ -32,14 +35,21 @@ def get_app_binaries():
     apps = os.listdir("/Applications")
     binaries = []
     for app in apps:
-        if app in (".DS_Store", ".localized", "Utilities"):
+        if app in (".DS_Store", ".localized", "Intel Power Gadget", "Utilities"):
             continue
-        base_app = app
-        if app.endswith(".app"):
-            size = len(app)
-            base_app = app[: size - 4]
-        mac_binary = Path("/Applications/" + app + "/Contents/MacOS/" + base_app)
+
+        app_plist = Path("/Applications/" + app + "/Contents/Info.plist")
+        try:
+            with open(app_plist, "rb") as f:
+                plist_data = plistlib.load(f)
+            app_exe = plist_data["CFBundleExecutable"]
+        except FileNotFoundError as e:
+            print()
+            logging.error(e)
+
+        mac_binary = Path("/Applications/" + app + "/Contents/MacOS/" + app_exe)
         binaries.append(mac_binary)
+
     return binaries
 
 
