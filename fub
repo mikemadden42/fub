@@ -33,6 +33,7 @@ def get_arch(mac_app):
 def get_app_binaries():
     """Get list of installed macOS applications."""
     apps = os.listdir("/Applications")
+    apps.sort()
     binaries = []
     for app in apps:
         if app in (".DS_Store", ".localized", "Intel Power Gadget", "Utilities"):
