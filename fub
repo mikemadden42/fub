@@ -44,12 +44,11 @@ def get_app_binaries():
             with open(app_plist, "rb") as f:
                 plist_data = plistlib.load(f)
             app_exe = plist_data["CFBundleExecutable"]
+            mac_binary = Path("/Applications/" + app + "/Contents/MacOS/" + app_exe)
+            binaries.append(mac_binary)
         except FileNotFoundError as e:
             print()
             logging.error(e)
-
-        mac_binary = Path("/Applications/" + app + "/Contents/MacOS/" + app_exe)
-        binaries.append(mac_binary)
 
     return binaries
 
