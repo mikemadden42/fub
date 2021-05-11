@@ -36,18 +36,16 @@ def get_app_binaries():
     apps.sort()
     binaries = []
     for app in apps:
-        if app in (".DS_Store", ".localized", "Intel Power Gadget", "Utilities"):
-            continue
-
-        app_plist = Path("/Applications/" + app + "/Contents/Info.plist")
         try:
+            app_plist = Path("/Applications/" + app + "/Contents/Info.plist")
             with open(app_plist, "rb") as f:
                 plist_data = plistlib.load(f)
             app_exe = plist_data["CFBundleExecutable"]
             mac_binary = Path("/Applications/" + app + "/Contents/MacOS/" + app_exe)
             binaries.append(mac_binary)
         except FileNotFoundError as e:
-            print()
+            logging.error(e)
+        except NotADirectoryError as e:
             logging.error(e)
 
     return binaries
@@ -55,12 +53,5 @@ def get_app_binaries():
 
 if __name__ == "__main__":
     for binary in get_app_binaries():
-        try:
-            print(binary, end=" -> ")
-            print(get_arch(binary))
-        except FileNotFoundError as e:
-            print()
-            logging.error(e)
-        except NotADirectoryError as e:
-            print()
-            logging.error(e)
+        print(binary, end=" -> ")
+        print(get_arch(binary))
