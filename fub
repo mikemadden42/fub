@@ -30,6 +30,33 @@ def get_arch(mac_app):
     return archs
 
 
+def print_list(items, header):
+    print(header)
+    for item in items:
+        print(item)
+    print()
+
+
+def filter_binaries(mac_apps):
+    """Determine the type of macOS app."""
+    intel_binaries = []
+    universal_binaries = []
+    for mac_app in mac_apps:
+        m = MachO.MachO(mac_app)
+        archs = []
+        for header in m.headers:
+            cpu_type = header.header.cputype
+            arch = str(mach_o.CPU_TYPE_NAMES.get(cpu_type)).lower()
+            archs.append(arch)
+        if "x86_64" in archs and "arm64" in archs:
+            universal_binaries.append(str(mac_app))
+        else:
+            intel_binaries.append(str(mac_app))
+
+    print_list(intel_binaries, "Intel Binaries")
+    print_list(universal_binaries, "Universal Binaries")
+
+
 def get_app_binaries():
     """Get list of installed macOS applications."""
     apps = os.listdir("/Applications")
@@ -52,6 +79,8 @@ def get_app_binaries():
 
 
 if __name__ == "__main__":
-    for binary in get_app_binaries():
-        print(binary, end=" -> ")
-        print(get_arch(binary))
+    # for binary in get_app_binaries():
+    #     print(binary, end=" -> ")
+    #     print(get_arch(binary))
+
+    filter_binaries(get_app_binaries())
