@@ -18,18 +18,18 @@
     "default": {
         "altgraph": {
             "hashes": [
-                "sha256:1f05a47122542f97028caf78775a095fbe6a2699b5089de8477eb583167d69aa",
-                "sha256:c623e5f3408ca61d4016f23a681b9adb100802ca3e3da5e718915a9e4052cebe"
+                "sha256:743628f2ac6a7c26f5d9223c91ed8ecbba535f506f4b6f558885a8a56a105857",
+                "sha256:ebf2269361b47d97b3b88e696439f6e4cbc607c17c51feb1754f90fb79839158"
             ],
-            "version": "==0.17"
+            "version": "==0.17.2"
         },
         "macholib": {
             "hashes": [
-                "sha256:196b62c592e46f0859508a73a11eca6b082a5c8db330ba90cb56f2409e48e2d5",
-                "sha256:a86f0fa3ff8899d8cd7d4ed357d6da87448bb34199697f31275b9fc12478d6a8"
+                "sha256:1542c41da3600509f91c165cb897e7e54c0e74008bd8da5da7ebbee519d593d2",
+                "sha256:885613dd02d3e26dbd2b541eb4cc4ce611b841f827c0958ab98656e478b9e6f6"
             ],
             "index": "pypi",
-            "version": "==1.15"
+            "version": "==1.15.2"
         }
     },
     "develop": {}
