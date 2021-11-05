@@ -31,6 +31,7 @@ def get_arch(mac_app):
 
 
 def print_list(items, header):
+    """Print list with provided header."""
     print(header)
     for item in items:
         print(item)
@@ -40,6 +41,7 @@ def print_list(items, header):
 def filter_binaries(mac_apps):
     """Determine the type of macOS app."""
     intel_binaries = []
+    apple_binaries = []
     universal_binaries = []
     for mac_app in mac_apps:
         m = MachO.MachO(mac_app)
@@ -50,10 +52,13 @@ def filter_binaries(mac_apps):
             archs.append(arch)
         if "x86_64" in archs and "arm64" in archs:
             universal_binaries.append(str(mac_app))
-        else:
+        elif archs[0] == "x86_64":
             intel_binaries.append(str(mac_app))
+        elif archs[0] == "arm64":
+            apple_binaries.append(str(mac_app))
 
     print_list(intel_binaries, "Intel Binaries")
+    print_list(apple_binaries, "Apple Binaries")
     print_list(universal_binaries, "Universal Binaries")
 
 
