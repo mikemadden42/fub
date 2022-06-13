@@ -44,7 +44,10 @@ def filter_binaries(mac_apps):
     apple_binaries = []
     universal_binaries = []
     for mac_app in mac_apps:
-        m = MachO.MachO(mac_app)
+        try:
+            m = MachO.MachO(mac_app)
+        except ValueError:
+            continue
         archs = []
         for header in m.headers:
             cpu_type = header.header.cputype
