@@ -1,2 +1,2 @@
-altgraph==0.17.2
-macholib==1.16
+altgraph==0.17.2 ; python_version >= "3.9" and python_version < "4.0"
+macholib==1.16 ; python_version >= "3.9" and python_version < "4.0"
