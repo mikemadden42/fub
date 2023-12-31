@@ -21,7 +21,15 @@ logging.basicConfig(
 
 
 def get_arch(mac_app: Union[str, Path]) -> List[str]:
-    """Determine the type of macOS app."""
+    """
+    Determine the architecture type(s) of a macOS app.
+
+    Args:
+        mac_app (Union[str, Path]): Path to the macOS app.
+
+    Returns:
+        List[str]: List of architecture types present in the app.
+    """
     m = MachO.MachO(str(mac_app))
     archs = []
     for header in m.headers:
@@ -32,7 +40,13 @@ def get_arch(mac_app: Union[str, Path]) -> List[str]:
 
 
 def print_list(items: List[str], header: str) -> None:
-    """Print list with provided header."""
+    """
+    Print a list with the provided header.
+
+    Args:
+        items (List[str]): List of items to be printed.
+        header (str): Header to be printed before the list.
+    """
     print(header)
     for item in items:
         print(item)
@@ -40,7 +54,12 @@ def print_list(items: List[str], header: str) -> None:
 
 
 def filter_binaries(mac_apps: List[Union[str, Path]]) -> None:
-    """Determine the type of macOS app."""
+    """
+    Determine the architecture type(s) of macOS apps and print them categorized.
+
+    Args:
+        mac_apps (List[Union[str, Path]]): List of paths to macOS apps.
+    """
     intel_binaries = []
     apple_binaries = []
     universal_binaries = []
@@ -67,7 +86,12 @@ def filter_binaries(mac_apps: List[Union[str, Path]]) -> None:
 
 
 def get_app_binaries() -> List[Union[str, Path]]:
-    """Get list of installed macOS applications."""
+    """
+    Get a list of installed macOS applications.
+
+    Returns:
+        List[Union[str, Path]]: List of paths to macOS app binaries.
+    """
     apps = os.listdir("/Applications")
     apps.sort()
     binaries = []
