@@ -6,6 +6,7 @@ import logging
 import os
 import plistlib
 from pathlib import Path
+from typing import List, Union
 
 # third party libraries
 from macholib import MachO, mach_o
@@ -19,9 +20,9 @@ logging.basicConfig(
 )
 
 
-def get_arch(mac_app):
+def get_arch(mac_app: Union[str, Path]) -> List[str]:
     """Determine the type of macOS app."""
-    m = MachO.MachO(mac_app)
+    m = MachO.MachO(str(mac_app))
     archs = []
     for header in m.headers:
         cpu_type = header.header.cputype
@@ -30,7 +31,7 @@ def get_arch(mac_app):
     return archs
 
 
-def print_list(items, header):
+def print_list(items: List[str], header: str) -> None:
     """Print list with provided header."""
     print(header)
     for item in items:
@@ -38,14 +39,14 @@ def print_list(items, header):
     print()
 
 
-def filter_binaries(mac_apps):
+def filter_binaries(mac_apps: List[Union[str, Path]]) -> None:
     """Determine the type of macOS app."""
     intel_binaries = []
     apple_binaries = []
     universal_binaries = []
     for mac_app in mac_apps:
         try:
-            m = MachO.MachO(mac_app)
+            m = MachO.MachO(str(mac_app))
         except ValueError:
             continue
         archs = []
@@ -65,7 +66,7 @@ def filter_binaries(mac_apps):
     print_list(universal_binaries, "Universal Binaries")
 
 
-def get_app_binaries():
+def get_app_binaries() -> List[Union[str, Path]]:
     """Get list of installed macOS applications."""
     apps = os.listdir("/Applications")
     apps.sort()
@@ -87,8 +88,4 @@ def get_app_binaries():
 
 
 if __name__ == "__main__":
-    # for binary in get_app_binaries():
-    #     print(binary, end=" -> ")
-    #     print(get_arch(binary))
-
     filter_binaries(get_app_binaries())
